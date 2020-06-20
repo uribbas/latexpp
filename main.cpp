@@ -1,6 +1,6 @@
 #include "latex.hpp"
 
-#include <boost/filesystem.hpp>
+#include <filesystem.hpp>
 #include <iostream>
 
 int main(int argc, const char* argv[])

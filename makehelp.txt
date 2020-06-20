@@ -1,0 +1,37 @@
+CXX			:= gcc
+CXXFLAGS	:= -std=c++1y -g -Wall
+
+INCLUDES := -I./v8-cmake/v8 -I./v8-cmake/v8/include -I./v8-cmake/v8/include/libplatform -I./ -I./boost_1_73_0 -I./ -I./boost_1_73_0/boost -I./wkhtmltox/src -I./wkhtmltox/src/wkhtmltox
+
+LIBS :=  -L./v8-cmake/v8/libplatform -L/usr/local/lib -L./boost_1_73_0/boost/filesystem -L./boost_1_73_0/libs
+
+#-lboost_system -lboost_filesystem -l./wkhtmltopdf/src/image -lv8_nosnapshot -lv8_snapshot -lv8_base -lv8_libbase -lv8_libplatform -lv8
+
+OBJECTS := main.o latex.o
+
+all: image
+
+#build: $(OBJECTS)
+#	$(MAKE) image
+#	$(MAKE) clean
+
+image: $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o image  $(LIBS)
+
+latex.o: ./latex.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c ./latex.cpp -o latex.o
+
+main.o: ./main.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c ./main.cpp -o main.o
+
+clean:
+	rm -f *.o
+
+reset:
+	$(MAKE) clean
+	rm -f *.png
+	rm -f *.svg
+	rm -f *.jpg
+	rm -f image
+
+.PHONY: clean reset

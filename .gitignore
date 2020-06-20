@@ -55,6 +55,9 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
+# Boost folder
+boost_1_73_0
+
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
