@@ -601,6 +601,8 @@ protected:
 
 	/*! The virtual environment in which the V8 runs. */
 	v8::Isolate* _isolate;
+    
+    virtual const char* ToCString(v8::String::Utf8Value value);
 	
 };
 

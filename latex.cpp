@@ -105,6 +105,11 @@ void swap(Latex& first, Latex& second) noexcept
 Latex::~Latex()
 {
 	wkhtmltoimage_deinit();
+
+}
+
+const char* Latex::ToCString(v8::String::Utf8Value value) {
+  return *value ? *value : "<string conversion failed>";
 }
 
 std::string Latex::to_html(const std::string& latex) const
@@ -131,9 +136,15 @@ std::string Latex::to_html(const std::string& latex) const
 	auto value = _run(source, context);
 
 	//std::string html = *static_cast<v8::String::Utf8Value>(value);
-	std::string html = v8::String::NewFromUtf8(_isolate,
-											 *value, v8::NewStringType::kNormal
-											 );
+    //const v8::Local<v8::Context> &context=_isolate->GetCurrentContext();
+    
+    //v8::String::Utf8Value *v8_html=new v8::String::Utf8Value(_isolate,value);
+   // auto html=std::string(ToCString(*v8_html));
+	//std::string html=value.ToString(context);
+    //std::string html = v8::String::NewFromUtf8(_isolate,*value, v8::NewStringType::kNormal);
+    
+    v8::String::Utf8Value v8_html(_isolate, value);
+    std::string html(*v8_html);
 
 	return "<div class='latex'>\n" + html + "</div>\n";
 }
@@ -288,9 +299,9 @@ v8::Local<v8::Value> Latex::_run(const std::string& source,
 		// Grab last exception
 		auto exception = try_catch.Exception();
 		// std::string what = *static_cast<v8::String::Utf8Value>(exception);
-		std::string what = v8::String::NewFromUtf8(_isolate,
-												 *exception, v8::NewStringType::kNormal
-												 );
+        v8::String::Utf8Value v8_what(_isolate,exception);
+        std::string what(*v8_what);
+		//sstd::string what = v8::String::NewFromUtf8(_isolate,*exception, v8::NewStringType::kNormal);
 
 		// Remove the 'ParseError' (redundant)
 		throw ParseException(what.substr(12));
